@@ -1,10 +1,17 @@
-from sys import exec_prefix
-import serial
+import csv
+from datetime import datetime
 
 import pyperclip
+import serial
 
 from django.conf import settings
 
+def write_to_csv(heat_result):
+    write_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    heat_result = heat_result.replace('\t', ',').replace('\n',f',{write_timestamp}\n' )+f',{write_timestamp}\n'
+    filename = f"results_{datetime.today().strftime('%Y-%m-%d')}.csv"
+    with open(filename,'a') as fd:
+        fd.write(heat_result)
 
 def gate_listen():
     heat_results = None
@@ -59,18 +66,22 @@ def gate_listen():
         lane_cars[2] = input(f"   Lane 3 Car #: ({lane_cars[2]}) ") or f"{lane_cars[2]}"
 
         print(f"\n{lane_cars}")
-        go_race = input("Enter to start heat or any other key to re-enter cars: ")
+        go_race = input("Enter to start heat or any other key to re-enter cars (q to quit): ")
         if go_race != "":
             auto_advance_car_lanes = False
+            if go_race == "q":
+                exit()
             continue
 
-        print(f"Heat {heat} Ready! GO GO GO!", end='\r')
+        print(f"\nHeat {heat} Ready! GO GO GO!", end='\r')
         data_raw = gate.readline()
         print('                                        ', end='\r')
         # print(data_raw)
         data_raw = data_raw.decode("utf-8").replace("  ", "D ")
         heat_results = data_raw.split(' ')[0:lanes]
         # print(heat_results)
+        
+        # Parse the result and build the output strings
         clipboard_result = ''
         i = 0
         for result in heat_results:
@@ -83,7 +94,9 @@ def gate_listen():
             i += 1
             if i < len(heat_results):
                 clipboard_result += '\n'
+
         pyperclip.copy(clipboard_result)
+        write_to_csv(clipboard_result)
         auto_advance_car_lanes = True
         try:
             heat = int(input(f"\nEnter to begin heat {heat+1} or override: ") or (heat + 1))
