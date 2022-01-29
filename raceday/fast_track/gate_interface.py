@@ -13,9 +13,8 @@ def write_to_csv(heat_result):
     with open(filename,'a') as fd:
         fd.write(heat_result)
 
-def gate_listen():
-    heat_results = None
-
+def process_result(data_raw, heat, lane_cars):
+    
     lane_names = {
         "A": "1",
         "B": "2",
@@ -28,6 +27,31 @@ def gate_listen():
         "#": {"title": "3rd", "position": 3},
         "D": {"title": "DNF", "position": None},
     }
+
+    heat_results = data_raw.split(' ')[0:len(lane_cars)]
+    # print(heat_results)
+    
+    # Parse the result and build the output strings
+    clipboard_result = ''
+    i = 0
+    for result in heat_results:
+        lane = result.split('=')[0][-1:]
+        result = result.split('=')[1]
+        place_name = place_names[result[-1:]]["title"]
+        place_position = place_names[result[-1:]]["position"]
+        print(f'Heat {heat}\tLane {lane_names[lane]}\tCar {lane_cars[i]}\t{result[0:5]}\t{place_name}')
+        clipboard_result += f'{heat}\t{lane_names[lane]}\t{lane_cars[i]}\t{result[0:5]}\t{place_position}'
+        i += 1
+        if i < len(heat_results):
+            clipboard_result += '\n'
+
+    pyperclip.copy(clipboard_result)
+    write_to_csv(clipboard_result)
+    return
+
+def gate_listen():
+    heat_results = None
+
 
     if hasattr(settings, "DEFAULT_FAST_TRACK_PORT"):
         com_port = settings.DEFAULT_FAST_TRACK_PORT
@@ -78,25 +102,7 @@ def gate_listen():
         print('                                        ', end='\r')
         # print(data_raw)
         data_raw = data_raw.decode("utf-8").replace("  ", "D ")
-        heat_results = data_raw.split(' ')[0:lanes]
-        # print(heat_results)
-        
-        # Parse the result and build the output strings
-        clipboard_result = ''
-        i = 0
-        for result in heat_results:
-            lane = result.split('=')[0][-1:]
-            result = result.split('=')[1]
-            place_name = place_names[result[-1:]]["title"]
-            place_position = place_names[result[-1:]]["position"]
-            print(f'Heat {heat}\tLane {lane_names[lane]}\tCar {lane_cars[i]}\t{result[0:5]}\t{place_name}')
-            clipboard_result += f'{heat}\t{lane_names[lane]}\t{lane_cars[i]}\t{result[0:5]}\t{place_position}'
-            i += 1
-            if i < len(heat_results):
-                clipboard_result += '\n'
-
-        pyperclip.copy(clipboard_result)
-        write_to_csv(clipboard_result)
+        process_result(data_raw, heat, lane_cars)
         auto_advance_car_lanes = True
         try:
             heat = int(input(f"\nEnter to begin heat {heat+1} or override: ") or (heat + 1))

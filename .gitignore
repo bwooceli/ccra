@@ -1,5 +1,5 @@
 # IGNORE FOR NOW
-# speakeasy/
+*.csv
 
 # Windows image file caches
 Thumbs.db
