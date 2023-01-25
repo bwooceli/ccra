@@ -16,4 +16,3 @@ Run the race with
 
     .\derby_day.ps1
 
-
