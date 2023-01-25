@@ -6,6 +6,14 @@ Change the settings for these values based on your local system in raceday.setti
   - DEFAULT_FAST_TRACK_PORT = "COM4"
   - DEFAULT_FAST_TRACK_LANES = 3
 
+# Tests
 Tests can be run with:
 
     coverage run --source='.' manage.py test
+
+# Race Day script
+Run the race with 
+
+    .\derby_day.ps1
+
+

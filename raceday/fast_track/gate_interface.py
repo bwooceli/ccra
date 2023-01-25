@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime
+import os
 
 import pyperclip
 import serial
@@ -9,7 +10,11 @@ from django.conf import settings
 def write_to_csv(heat_result):
     write_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     heat_result = heat_result.replace('\t', ',').replace('\n',f',{write_timestamp}\n' )+f',{write_timestamp}\n'
-    filename = f"results_{datetime.today().strftime('%Y-%m-%d')}.csv"
+    filename = f"results_2022-01-29.csv"
+    
+    if os.stat(filename).st_size == 0:
+        with open(filename, 'a') as fd:
+            fd.write('Heat,Lane,Car,Time,Position,HeatTimestamp\n')
     with open(filename,'a') as fd:
         fd.write(heat_result)
 
@@ -52,13 +57,9 @@ def process_result(data_raw, heat, lane_cars):
 def gate_listen():
     heat_results = None
 
+    print('''***************************** IMPORTANT ******************************\n*** Make sure that the lane numbers line up with the gate lanes!!! ***''')
 
-    if hasattr(settings, "DEFAULT_FAST_TRACK_PORT"):
-        com_port = settings.DEFAULT_FAST_TRACK_PORT
-    else:    
-        com_port = input("Enter the port for the FastTrack adapter: ")
-        if com_port == "":
-            com_port = "COM4"
+    com_port = input("Enter the port for the FastTrack adapter: ") or "COM5"
 
     if hasattr(settings, "DEFAULT_FAST_TRACK_LANES"):
         lanes = settings.DEFAULT_FAST_TRACK_LANES
@@ -98,6 +99,11 @@ def gate_listen():
             continue
 
         print(f"\nHeat {heat} Ready! GO GO GO!", end='\r')
+        with open("Now Racing.csv", 'w') as fd:
+            output = 'Heat,Car\n'
+            for car in lane_cars:
+                output += f'{heat},{car}\n'
+            fd.write(output)
         data_raw = gate.readline()
         print('                                        ', end='\r')
         # print(data_raw)
