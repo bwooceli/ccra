@@ -1,4 +1,4 @@
-import csv
+#### import csv
 from datetime import datetime
 import os
 
@@ -10,7 +10,7 @@ from django.conf import settings
 def write_to_csv(heat_result):
     write_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     heat_result = heat_result.replace('\t', ',').replace('\n',f',{write_timestamp}\n' )+f',{write_timestamp}\n'
-    filename = f"results_2022-01-29.csv"
+    filename = f"results_2023-01-28.csv"
     
     if os.stat(filename).st_size == 0:
         with open(filename, 'a') as fd:
@@ -55,7 +55,7 @@ def process_result(data_raw, heat, lane_cars):
     return
 
 def gate_listen():
-    heat_results = None
+    ##### heat_results = None
 
     print('''***************************** IMPORTANT ******************************\n*** Make sure that the lane numbers line up with the gate lanes!!! ***''')
 
@@ -73,7 +73,7 @@ def gate_listen():
     heat = int(input(f'\nEnter Starting Heat Number (Default 1): ') or 1) 
 
     keep_alive = "y"
-    lane = ''
+    ##### lane = ''
 
     lane_cars = ["1", " ", " "]
 
