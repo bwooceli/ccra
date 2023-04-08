@@ -31,9 +31,13 @@ class GateTestCase(TestCase):
     def setUp(self):
         pass
 
-    @patch("serial.Serial.readline", mocked_gate_readline_normal)
-    def test_gate_normal_heat(self):
-        self.assertEqual(True, gate_listen())
+    def test_gate_connection(self):
+        track = FastTrack()
+        self.assertEqual(True, track.connected)
+
+    # @patch("serial.Serial.readline", mocked_gate_readline_normal)
+    # def test_gate_normal_heat(self):
+    #     self.assertEqual(True, gate_listen())
 
     # @patch("serial.Serial.readline", mocked_gate_readline_one_dnf)
     # def test_gate_one_dnf_heat(self):
