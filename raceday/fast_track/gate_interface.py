@@ -9,16 +9,26 @@ import serial.tools.list_ports
 date = datetime.now().strftime("%Y-%m-%d")
 
 
-class FastTrackGate():
+class FastTrackGate:
     def __init__(
         self,
         output_file=os.path.join(
-            "fast_track_output", f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S.%f')}.csv"
+            "fast_track_output",
+            f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S.%f')}.csv",
         ),
         lane_count=3,
         *args,
         **kwargs,
     ):
+        """
+        Initialize a FastTrackGate object.
+
+        Args:
+            output_file (str): Path to the output file for the raw data from the gate. Defaults to a timestamped file in the fast_track_output directory.
+            lane_count (int): Number of lanes to be used. Defaults to 3.
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+        """
         self.connected = False
 
         self.lane_count = lane_count
@@ -30,6 +40,9 @@ class FastTrackGate():
         for i in range(lane_count):
             self.lane_names[possible_lane_names[i]] = str(i + 1)
 
+        # This is a map of the place names as designated by the FastTrack hardware output
+        # with the corresponding place title and position.  The position is only used
+        # for the raw output file.
         self.place_names = {
             "!": {"title": "1st", "position": 1},
             '"': {"title": "2nd", "position": 2},
@@ -37,11 +50,16 @@ class FastTrackGate():
             "D": {"title": "DNF", "position": None},
         }
 
+        # a path to the output file for the raw data from the gate
         self.output_file = output_file
 
         self.connect_to_gate()
 
     def connect_to_gate(self):
+        """
+        Attempt to connect to the FastTrack gate, prompting the user to select a port if necessary.
+        """
+
         print("Attempting gate connection...")
 
         likely_ports = []
@@ -66,6 +84,7 @@ class FastTrackGate():
             self.com_port = ports[int(selection) - 1].device
             self.com_device = ports[int(selection) - 1].description
         else:
+            # if there is only one likely port, use that one
             print(
                 f"Found likely port: {likely_ports[0].device} {likely_ports[0].description}"
             )
@@ -74,6 +93,7 @@ class FastTrackGate():
 
         print(f"Attempting port: {self.com_port} {self.com_device}")
         try:
+            # Connect to the gate
             self.gate = serial.Serial(self.com_port)
             print(f"Connected to {self.com_port} {self.com_device}")
             self.connected = True
@@ -81,6 +101,13 @@ class FastTrackGate():
             print(f"Failed to connect to {self.com_port} {self.com_device}")
 
     def write_to_csv(self, heat_result):
+        """
+        Write the raw data from the gate to a CSV file.
+
+        Args:
+            heat_result (str): Raw data from the gate containing heat results.
+        """
+
         write_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
         # write_timestamp with millisecondsB
         heat_result = (
@@ -99,35 +126,64 @@ class FastTrackGate():
         with open(filename, "a") as fd:
             fd.write(heat_result)
 
+    def process_single_result(self, result, heat, lane_cars, i):
+        """
+        Process a single result from the gate.
+
+        Args:
+            result (str): Raw result string from the gate.
+            heat (int): The heat number.
+            lane_cars (list): List of car numbers in each lane.
+            i (int): Index of the car in the lane_cars list.
+
+        Returns:
+            str: Processed result string.
+        """
+
+        lane = result.split("=")[0][-1:]
+        result = result.split("=")[1]
+        place_name = self.place_names[result[-1:]]["title"]
+        place_position = self.place_names[result[-1:]]["position"]
+        print(
+            f"Heat {heat}\tLane {self.lane_names[lane]}\tCar {lane_cars[i]}\t{result[0:5]}\t{place_name}"
+        )
+        return f"{heat}\t{self.lane_names[lane]}\t{lane_cars[i]}\t{result[0:5]}\t{place_position}"
+
     def process_result(self, data_raw, heat, lane_cars):
+        """
+        Process the raw data for a heat from the gate.
+
+        Args:
+            data_raw (str): Raw data from the gate containing heat results.
+            heat (int): The heat number.
+            lane_cars (list): List of car numbers in each lane.
+        """
         heat_results = data_raw.split(" ")[0 : len(lane_cars)]
-        # print(heat_results)
 
-        # Parse the result and build the output strings
-        clipboard_result = ""
-        i = 0
+        # Build the output strings using a list comprehension
+        result_row = [
+            self.process_single_result(result, heat, lane_cars, idx)
+            for idx, result in enumerate(heat_results)
+        ]
 
-        # sample data_raw:
-        # '@A=1.758# B=1.392" C=1.086! D=0.000D E=0.000D F=0.000D'
-        # print(heat_results)
+        # Join the results into a single string
+        result_row = "\n".join(result_row)
 
-        for result in heat_results:
-            lane = result.split("=")[0][-1:]
-            result = result.split("=")[1]
-            place_name = self.place_names[result[-1:]]["title"]
-            place_position = self.place_names[result[-1:]]["position"]
-            print(
-                f"Heat {heat}\tLane {self.lane_names[lane]}\tCar {lane_cars[i]}\t{result[0:5]}\t{place_name}"
-            )
-            clipboard_result += f"{heat}\t{self.lane_names[lane]}\t{lane_cars[i]}\t{result[0:5]}\t{place_position}"
-            i += 1
-            if i < len(heat_results):
-                clipboard_result += "\n"
-
-        self.write_to_csv(clipboard_result)
+        self.write_to_csv(result_row)
         return
 
     def run_race(self, starting_car_number=1, ending_car_number=10):
+        """
+        Run a race with the specified starting and ending car numbers.
+
+        Args:
+            starting_car_number (int): The starting car number for the race. Defaults to 1.
+            ending_car_number (int): The ending car number for the race. Defaults to 10.
+
+        Returns:
+            bool: True if the race finishes successfully, False otherwise.
+        """
+
         print(
             """***************************** IMPORTANT ******************************\n*** Make sure that the lane numbers line up with the gate lanes!!! ***\n"""
         )
@@ -146,30 +202,25 @@ class FastTrackGate():
             if auto_advance_car_lanes is True:
                 lane_cars[2] = lane_cars[1]
                 lane_cars[1] = lane_cars[0]
-                if int(lane_cars[2]) != ending_car_number: 
+                if int(lane_cars[2]) != ending_car_number:
                     lane_cars[0] = f"{int(lane_cars[1])+1}"
                 else:
                     final_heat = True
-            if int(lane_cars[0]) < ending_car_number+1 and final_heat is False: 
-                lane_cars[0] = (
-                    input(f"   Lane 1 Car #: ({lane_cars[0]}) ") or f"{lane_cars[0]}"
-                )
-            else:
-                lane_cars[0] = "0"
-                print(f"   Lane 1 Car #: (0) ")
-            
-            if int(lane_cars[1] or 0) < ending_car_number+1  and final_heat is False: 
-                lane_cars[1] = (
-                    input(f"   Lane 2 Car #: ({lane_cars[1]}) ") or f"{lane_cars[1]}"
-                )
-            else:
-                lane_cars[1] = "0"
-                print(f"   Lane 2 Car #: (0) ")
-                
-            if int(lane_cars[2] or 0) < ending_car_number+1: 
-                lane_cars[2] = (
-                    input(f"   Lane 3 Car #: ({lane_cars[2]}) ") or f"{lane_cars[2]}"
-                )
+
+            for idx in range(3):
+                if int(lane_cars[idx] or 0) < ending_car_number + 1 and not final_heat:
+                    lane_cars[idx] = (
+                        input(f"   Lane {idx + 1} Car #: ({lane_cars[idx]}) ")
+                        or f"{lane_cars[idx]}"
+                    )
+                elif final_heat and idx == 2:
+                    lane_cars[idx] = (
+                        input(f"   Lane {idx + 1} Car #: ({lane_cars[idx]}) ")
+                        or f"{lane_cars[idx]}"
+                    )
+                else:
+                    lane_cars[idx] = "0"
+                    print(f"   Lane {idx + 1} Car #: (0) ")
 
             print(f"\n{lane_cars}")
             go_race = input(
@@ -189,10 +240,12 @@ class FastTrackGate():
             data_raw = data_raw.decode("utf-8").replace("  ", "D ")
             self.process_result(data_raw, heat, lane_cars)
             auto_advance_car_lanes = True
-            
+
             try:
                 if f"{lane_cars[2]}" == f"{ending_car_number}":
-                    finish_race = input(f"\nRace Complete!\nPress Enter to quit or O to override: ")
+                    finish_race = input(
+                        f"\nRace Complete!\nPress Enter to quit or O to override: "
+                    )
                     if finish_race == "":
                         return True
                 heat = int(
