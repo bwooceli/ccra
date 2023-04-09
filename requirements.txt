@@ -2,5 +2,4 @@ black==23.3.0
 coverage==7.2.3
 Django==4.2
 mock==5.0.1
-pyperclip==1.8.2
 pyserial==3.5

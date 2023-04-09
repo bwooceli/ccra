@@ -2,4 +2,7 @@
 omit = 
     */venv/*
     */migrations/*
+    */tests*
     manage.py
+
+    *sgi.py

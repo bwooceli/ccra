@@ -7,4 +7,5 @@ class Command(BaseCommand):
     help = "Connect to the track gate and run the race"
 
     def handle(self, *args, **kwargs):
-        gate_interface.gate_listen()
+        track = gate_interface.FastTrackGate()
+        track.run_race()
