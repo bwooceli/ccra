@@ -1,4 +1,3 @@
-#### import csv
 from datetime import datetime
 import os
 
@@ -9,7 +8,7 @@ import serial.tools.list_ports
 date = datetime.now().strftime("%Y-%m-%d")
 
 
-class FastTrackGate:
+class TrackTimer:
     def __init__(
         self,
         output_file=os.path.join(
@@ -22,10 +21,10 @@ class FastTrackGate:
         **kwargs,
     ):
         """
-        Initialize a FastTrackGate object.
+        Initialize a TrackTimer object.
 
         Args:
-            output_file (str): Path to the output file for the raw data from the gate. Defaults to a timestamped file in the race_track_output directory.
+            output_file (str): Path to the output file for the raw data from the timer. Defaults to a timestamped file in the race_track_output directory.
             lane_count (int): Number of lanes to be used. Defaults to 3.
             *args: Variable length argument list.
             **kwargs: Arbitrary keyword arguments.
@@ -51,22 +50,22 @@ class FastTrackGate:
             "D": {"title": "DNF", "position": None},
         }
 
-        # a path to the output file for the raw data from the gate
+        # a path to the output file for the raw data from the timer
         self.output_file = output_file
 
-        self.connect_to_gate()
+        self.connect_to_timer()
 
-    def connect_to_gate(self):
+    def connect_to_timer(self):
         """
-        Attempt to connect to the FastTrack gate, prompting the user to select a port if necessary.
+        Attempt to connect to the FastTrack timer, prompting the user to select a port if necessary.
         """
 
-        print("Attempting gate connection...")
+        print("Attempting timer connection...")
 
         likely_ports = []
         selection_prompt = "\n"
 
-        # use serial to scan for the gate
+        # use serial to scan for the timer
         ports = serial.tools.list_ports.comports()
         # Print the device name and port number for each port
         for i, port in enumerate(ports):
@@ -94,8 +93,8 @@ class FastTrackGate:
 
         print(f"Attempting port: {self.com_port} {self.com_device}")
         try:
-            # Connect to the gate
-            self.gate = serial.Serial(self.com_port)
+            # Connect to the timer
+            self.track_timer = serial.Serial(self.com_port)
             print(f"Connected to {self.com_port} {self.com_device}")
             self.connected = True
         except:
@@ -103,10 +102,10 @@ class FastTrackGate:
 
     def write_to_csv(self, heat_result):
         """
-        Write the raw data from the gate to a CSV file.
+        Write the raw data from the timer to a CSV file.
 
         Args:
-            heat_result (str): Raw data from the gate containing heat results.
+            heat_result (str): Raw data from the timer containing heat results.
         """
 
         write_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
@@ -129,10 +128,10 @@ class FastTrackGate:
 
     def process_single_result(self, result, heat, lane_cars, i):
         """
-        Process a single result from the gate.
+        Process a single result from the timer.
 
         Args:
-            result (str): Raw result string from the gate.
+            result (str): Raw result string from the timer.
             heat (int): The heat number.
             lane_cars (list): List of car numbers in each lane.
             i (int): Index of the car in the lane_cars list.
@@ -152,10 +151,10 @@ class FastTrackGate:
 
     def process_result(self, data_raw, heat, lane_cars):
         """
-        Process the raw data for a heat from the gate.
+        Process the raw data for a heat from the timer.
 
         Args:
-            data_raw (str): Raw data from the gate containing heat results.
+            data_raw (str): Raw data from the timer containing heat results.
             heat (int): The heat number.
             lane_cars (list): List of car numbers in each lane.
         """
@@ -186,7 +185,7 @@ class FastTrackGate:
         """
 
         print(
-            """***************************** IMPORTANT ******************************\n*** Make sure that the lane numbers line up with the gate lanes!!! ***\n"""
+            """***************************** IMPORTANT ******************************\n*** Make sure that the lane numbers line up with the timer lanes!!! ***\n"""
         )
 
         heat = int(input(f"\nEnter Starting Heat Number (Default 1): ") or 1)
@@ -235,7 +234,7 @@ class FastTrackGate:
                 continue
 
             print(f"\nHeat {heat} Ready! GO GO GO!", end="\r")
-            data_raw = self.gate.readline()
+            data_raw = self.track_timer.readline()
             print("                                        ", end="\r")
             # print(data_raw)
             data_raw = data_raw.decode("utf-8").replace("  ", "D ")

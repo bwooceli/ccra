@@ -1,8 +1,8 @@
 from django.db import models
 
 
-class TrackGateManufacturer(models.Model):
-    """TrackGateManufacturer model
+class TrackTimerManufacturer(models.Model):
+    """TrackTimerManufacturer model
     Sample
         Name: Microwizard
         Website: https://www.microwizard.com/
@@ -19,8 +19,8 @@ class TrackGateManufacturer(models.Model):
         return self.name
 
 
-class TrackGate(models.Model):
-    """TrackGate model
+class TrackTimer(models.Model):
+    """TrackTimer model
     Sample
         Model: K3
         Version: 1.0
@@ -43,7 +43,7 @@ class TrackGate(models.Model):
         max_length=255,
         blank=True,
         null=True,
-        default="@A=9.999! B=9.999  C=9.999  D=0.000  E=0.000  F=0.000  \r\n",
+        default='@A=1.758# B=1.392" C=1.086! D=0.000  E=0.000  F=0.000',
     )
 
     # set uniquetogether to manufacturer, model, version

@@ -11,5 +11,5 @@ class Command(BaseCommand):
         starting_car_number = int(kwargs["starting_car_number"])
         ending_car_number = int(kwargs["ending_car_number"])
 
-        track = track_timer_interface.FastTrackGate()
+        track = track_timer_interface.TrackTimer()
         track.run_race(starting_car_number, ending_car_number)
