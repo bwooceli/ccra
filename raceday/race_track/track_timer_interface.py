@@ -13,7 +13,8 @@ class FastTrackGate:
     def __init__(
         self,
         output_file=os.path.join(
-            "fast_track_output",
+            "track_output",
+            "race_track_output",
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S.%f')}.csv",
         ),
         lane_count=3,
@@ -24,7 +25,7 @@ class FastTrackGate:
         Initialize a FastTrackGate object.
 
         Args:
-            output_file (str): Path to the output file for the raw data from the gate. Defaults to a timestamped file in the fast_track_output directory.
+            output_file (str): Path to the output file for the raw data from the gate. Defaults to a timestamped file in the race_track_output directory.
             lane_count (int): Number of lanes to be used. Defaults to 3.
             *args: Variable length argument list.
             **kwargs: Arbitrary keyword arguments.
@@ -172,7 +173,7 @@ class FastTrackGate:
         self.write_to_csv(result_row)
         return
 
-    def run_race(self, starting_car_number=1, ending_car_number=10):
+    def run_race(self, starting_car_number=1, ending_car_number=None):
         """
         Run a race with the specified starting and ending car numbers.
 

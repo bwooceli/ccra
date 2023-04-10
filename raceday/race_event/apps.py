@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class FastTrackConfig(AppConfig):
+class DerbyEventConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'fast_track'
+    name = 'race_event'

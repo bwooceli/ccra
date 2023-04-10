@@ -12,7 +12,7 @@ class Car(models.Model):
         return self.name
 
 
-class Event(models.Model):
+class RaceEvent(models.Model):
     title = models.CharField(max_length=255)
     auto_admin_reg = True
 
@@ -30,7 +30,7 @@ class Division(models.Model):
 
 class CarEventRegistration(models.Model):
     car = models.ForeignKey("Car", on_delete=models.CASCADE)
-    event = models.ForeignKey("Event", on_delete=models.CASCADE)
+    event = models.ForeignKey("RaceEvent", on_delete=models.CASCADE)
     division = models.ForeignKey("Division", on_delete=models.CASCADE)
     registration_id = models.CharField(max_length=15)
 
@@ -38,9 +38,9 @@ class CarEventRegistration(models.Model):
     
 
 class HeatResult(models.Model):
-    event = models.ForeignKey("Event", on_delete=CASCADE)
+    event = models.ForeignKey("RaceEvent", on_delete=models.CASCADE)
     heat_number = models.IntegerField()
     lane_number = models.IntegerField()
-    car = models.ForeignKey("Car")
+    car = models.ForeignKey("Car", on_delete=models.CASCADE)
     result = models.FloatField()
     

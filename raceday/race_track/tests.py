@@ -7,8 +7,8 @@ from unittest.mock import patch
 
 import serial
 
-# from fast_track.models import *
-from fast_track.gate_interface import *
+# from race_track.models import *
+from race_track.track_timer_interface import *
 
 DEFAULT_DELAY = 0.2
 
@@ -133,14 +133,14 @@ class GateTestCase(TestCase):
 
     def reset_output_file(self, test_method_name):
         output_file = os.path.join(
-                "fast_track_output_test",
-                f"{test_method_name}.csv",
-            )
+            "track_output",
+            "race_track_output_test",
+            f"{test_method_name}.csv",
+        )
         # delete the output file if it exists
         if os.path.exists(output_file):
             os.remove(output_file)
         return output_file
-
 
     @patch(
         "serial.tools.list_ports.comports",
@@ -150,9 +150,7 @@ class GateTestCase(TestCase):
     @patch("serial.Serial", MockedSerialInterface)
     def test_gate_connection_with_multiple_likely_ports_good_selection(self):
         output_file = self.reset_output_file(self._testMethodName)
-        track = FastTrackGate(
-            output_file=output_file
-        )
+        track = FastTrackGate(output_file=output_file)
         self.assertEqual(True, track.connected)
 
     @patch(
@@ -162,9 +160,7 @@ class GateTestCase(TestCase):
     @patch("serial.Serial", MockedSerialInterface)
     def test_gate_connection_with_single_likely_ports(self):
         output_file = self.reset_output_file(self._testMethodName)
-        track = FastTrackGate(
-            output_file=output_file
-        )
+        track = FastTrackGate(output_file=output_file)
         self.assertEqual(True, track.connected)
 
     @patch("serial.Serial", MockedInvalidSerialInterface)
@@ -174,9 +170,7 @@ class GateTestCase(TestCase):
     )
     def test_gate_connection_with_invalid_serial_interface(self):
         output_file = self.reset_output_file(self._testMethodName)
-        track = FastTrackGate(
-            output_file=output_file
-        )
+        track = FastTrackGate(output_file=output_file)
         self.assertEqual(False, track.connected)
 
     @patch("serial.Serial", MockedSerialInterface)
@@ -188,14 +182,14 @@ class GateTestCase(TestCase):
     @patch("builtins.input", mocked_user_input_enter)
     def test_heats(self):
         output_file = self.reset_output_file(self._testMethodName)
-        track = FastTrackGate(
-            output_file=output_file
-        )
-        
+        track = FastTrackGate(output_file=output_file)
+
         ending_car_number = 10
 
         self.assertEqual(True, track.connected)
-        race_complete = track.run_race(starting_car_number=1, ending_car_number=ending_car_number)
+        race_complete = track.run_race(
+            starting_car_number=1, ending_car_number=ending_car_number
+        )
         self.assertEqual(True, race_complete)
 
         # assert that the last line of the output file
@@ -220,12 +214,11 @@ class GateTestCase(TestCase):
     #     race_complete = track.run_race(starting_car_number=1, ending_car_number=10)
     #     self.assertEqual(True, race_complete)
 
-    #     # assert that the first character of the last line of 
+    #     # assert that the first character of the last line of
     #     # the output file is a '6'
     #     with open(output_file, "r") as f:
     #         last_line = f.readlines()[-1]
     #         self.assertEqual('6', last_line[0])
-
 
     # @patch("serial.Serial", MockedSerialInterface)
     # @patch("serial.Serial.readline", mocked_gate_readline_normal)

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-FAST_TRACK_DEFAULTS = {
+race_track_DEFAULTS = {
     "lanes": 3,
 }
 
@@ -29,7 +29,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "fast_track",
+    "race_event",
+    "race_track",
 ]
 
 MIDDLEWARE = [

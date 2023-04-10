@@ -1,10 +1,7 @@
 # Assumptions
 
-Assuming the Fast Track (tm) Pinewood Derby Gate and an IO Gear serial -> USB adapter, you will need to have [this driver](https://www.iogear.com/support/dm/driver/GUC232A)
+This has been tested with a USB->Serial adapter connected to a Fast Track (tm) Pinewood Derby Gate
 
-Change the settings for these values based on your local system in raceday.settings
-  - DEFAULT_FAST_TRACK_PORT = "COM4"
-  - DEFAULT_FAST_TRACK_LANES = 3
 
 
 # Race Day script
