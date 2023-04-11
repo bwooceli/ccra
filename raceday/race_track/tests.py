@@ -1,13 +1,13 @@
 import random
 import time
 
-from django.test import TestCase, override_settings
+from django.test import TestCase
 
 from unittest.mock import patch
 
 import serial
 
-# from race_track.models import *
+import race_track.models as track_models
 from race_track.track_timer_interface import *
 
 DEFAULT_DELAY = 0.2
@@ -133,8 +133,8 @@ class timerTestCase(TestCase):
 
     def reset_output_file(self, test_method_name):
         output_file = os.path.join(
-            "track_output",
-            "race_track_output_test",
+            "race_output",
+            "unittests",
             f"{test_method_name}.csv",
         )
         # delete the output file if it exists
@@ -198,6 +198,15 @@ class timerTestCase(TestCase):
             last_line = f.readlines()[-1]
             self.assertEqual(f"{ending_car_number}", last_line.split(",")[2])
 
+        # assert that every row in the output file has the correct number of columns
+        # and that the 6th column is a uuid4
+        with open(output_file, "r") as f:
+            for line in f:
+                self.assertEqual(7, len(line.split(",")))
+                # skip the first line
+                if not line.startswith("Heat"):
+                    self.assertEqual(36, len(line.split(",")[5]))
+
     @patch("serial.Serial", MockedSerialInterface)
     @patch("serial.Serial.readline", mocked_timer_readline_normal)
     @patch(
@@ -207,9 +216,7 @@ class timerTestCase(TestCase):
     @patch("builtins.input", mocked_user_input_quit_on_7th_heat)
     def test_heats_early_ending(self):
         output_file = self.reset_output_file(self._testMethodName)
-        track = TrackTimer(
-            output_file=output_file
-        )
+        track = TrackTimer(output_file=output_file)
         self.assertEqual(True, track.connected)
         race_complete = track.run_race(starting_car_number=1, ending_car_number=10)
         self.assertEqual(True, race_complete)
@@ -218,7 +225,7 @@ class timerTestCase(TestCase):
         # the output file is a '6'
         with open(output_file, "r") as f:
             last_line = f.readlines()[-1]
-            self.assertEqual('6', last_line[0])
+            self.assertEqual("6", last_line[0])
 
     # @patch("serial.Serial", MockedSerialInterface)
     # @patch("serial.Serial.readline", mocked_timer_readline_normal)
@@ -235,3 +242,44 @@ class timerTestCase(TestCase):
     #     print("\ntest_timer_connection_with_real_device")
     #     track = FastTrackTimer()
     #     self.assertEqual(True, track.connected)
+
+
+class TrackModelTestCases(TestCase):
+    def setUp(self):
+        # create django model test objects
+        self.manufacturer_name = "MicroWizard"
+        self.manufacturer_website = "https://www.microwizard.com"
+        self.manufacturer_phone_number = "1-800-555-1212"
+        self.manufacturer_description = (
+            "Microwizard is a company that makes track gates for pinewood derby tracks."
+        )
+
+        self.track_model = "K3"
+        self.track_version = "1.0"
+        self.track_lane_count = 3
+        self.track_output_file_template = (
+            "{manufacturer_name}_{track_model}_{track_version}.csv"
+        )
+
+        self.manufacturer = track_models.TrackTimerManufacturer.objects.create(
+            name=self.manufacturer_name,
+            website=self.manufacturer_website,
+            phone_number=self.manufacturer_phone_number,
+            description=self.manufacturer_description,
+        )
+
+        self.track = track_models.TrackTimer.objects.create(
+            manufacturer=self.manufacturer,
+            model=self.track_model,
+            version=self.track_version,
+            lane_count=self.track_lane_count,
+            output_file=self.track_output_file_template,
+        )
+
+    def test_track_model(self):
+        # test the model __str__ method responses
+        self.assertEqual(
+            f"{self.manufacturer_name} {self.track_model} {self.track_version}",
+            str(self.track),
+        )
+        self.assertEqual(self.manufacturer_name, str(self.manufacturer))

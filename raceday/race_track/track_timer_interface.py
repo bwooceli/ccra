@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+import uuid
 
 import serial
 import serial.tools.list_ports
@@ -12,7 +13,7 @@ class TrackTimer:
     def __init__(
         self,
         output_file=os.path.join(
-            "track_output",
+            "race_output",
             "race_track_output",
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S.%f')}.csv",
         ),
@@ -100,6 +101,25 @@ class TrackTimer:
         except:
             print(f"Failed to connect to {self.com_port} {self.com_device}")
 
+    def await_timer_result(self):
+        """
+        Wait for a result from the timer.
+
+        Returns:
+            str: Raw data from the timer containing heat results.
+        """
+
+        # Wait for a result from the timer
+        data_raw = self.track_timer.readline().decode("utf-8").replace("  \r\n", "")
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+        correlation_id = uuid.uuid4()
+
+        # Write the raw data to a tracktimer_device.log file, create the file if it doesn't exist
+        with open("tracktimer_device.log", "a") as fd:
+            fd.write(f"{data_raw}|{correlation_id}|{timestamp}\n")
+
+        return data_raw, correlation_id, timestamp
+
     def write_to_csv(self, heat_result):
         """
         Write the raw data from the timer to a CSV file.
@@ -121,12 +141,12 @@ class TrackTimer:
             # create directories if needed
             os.makedirs(os.path.dirname(filename), exist_ok=True)
             with open(filename, "w") as fd:
-                fd.write("Heat,Lane,Car,Time,Position,HeatTimestamp\n")
+                fd.write("Heat,Lane,Car,Time,Position,correlation_id,HeatTimestamp\n")
 
         with open(filename, "a") as fd:
             fd.write(heat_result)
 
-    def process_single_result(self, result, heat, lane_cars, i):
+    def process_single_result(self, result, heat, lane_cars, i, corelation_id):
         """
         Process a single result from the timer.
 
@@ -147,9 +167,9 @@ class TrackTimer:
         print(
             f"Heat {heat}\tLane {self.lane_names[lane]}\tCar {lane_cars[i]}\t{result[0:5]}\t{place_name}"
         )
-        return f"{heat}\t{self.lane_names[lane]}\t{lane_cars[i]}\t{result[0:5]}\t{place_position}"
+        return f"{heat}\t{self.lane_names[lane]}\t{lane_cars[i]}\t{result[0:5]}\t{place_position}\t{corelation_id}"
 
-    def process_result(self, data_raw, heat, lane_cars):
+    def process_result(self, data_raw, heat, lane_cars, correlation_id):
         """
         Process the raw data for a heat from the timer.
 
@@ -162,7 +182,7 @@ class TrackTimer:
 
         # Build the output strings using a list comprehension
         result_row = [
-            self.process_single_result(result, heat, lane_cars, idx)
+            self.process_single_result(result, heat, lane_cars, idx, correlation_id)
             for idx, result in enumerate(heat_results)
         ]
 
@@ -234,11 +254,11 @@ class TrackTimer:
                 continue
 
             print(f"\nHeat {heat} Ready! GO GO GO!", end="\r")
-            data_raw = self.track_timer.readline()
+            data_raw, correlation_id, timestamp = self.await_timer_result()
             print("                                        ", end="\r")
             # print(data_raw)
-            data_raw = data_raw.decode("utf-8").replace("  ", "D ")
-            self.process_result(data_raw, heat, lane_cars)
+            data_raw = data_raw.replace("  ", "D ")
+            self.process_result(data_raw, heat, lane_cars, correlation_id)
             auto_advance_car_lanes = True
 
             try:

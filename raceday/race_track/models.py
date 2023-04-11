@@ -29,7 +29,9 @@ class TrackTimer(models.Model):
     output_file will store raw heat results from the track gate to a csv file in the track_output directory
     """
 
-    manufacturer = models.CharField(max_length=100)
+    manufacturer = models.ForeignKey(
+        "TrackTimerManufacturer", on_delete=models.CASCADE, related_name="track_timers"
+    )
     model = models.CharField(max_length=100)
     version = models.CharField(max_length=100)
     lane_count = models.IntegerField()
@@ -51,4 +53,4 @@ class TrackTimer(models.Model):
         unique_together = ("manufacturer", "model", "version")
 
     def __str__(self):
-        return self.name
+        return f"{self.manufacturer} {self.model} {self.version}"

@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-10 22:31-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: .\race_event\models.py:25
+msgid "Blue"
+msgstr "Azul"
+
+#: .\race_event\models.py:26
+msgid "Brown"
+msgstr "Café"
+
+#: .\race_event\models.py:27
+msgid "Gold"
+msgstr "Oro"
+
+#: .\race_event\models.py:28
+msgid "Green"
+msgstr "Verde"
+
+#: .\race_event\models.py:29
+msgid "Orange"
+msgstr "Naranja"
+
+#: .\race_event\models.py:30
+msgid "Pink"
+msgstr "Rosa"
+
+#: .\race_event\models.py:31
+msgid "Purple"
+msgstr "Morado"
+
+#: .\race_event\models.py:32
+msgid "Red"
+msgstr "Rojo"
+
+#: .\race_event\models.py:33
+msgid "Silver"
+msgstr "Plata"
+
+#: .\race_event\models.py:34
+msgid "Yellow"
+msgstr "Amarillo"
+
+#: .\race_event\models.py:35
+msgid "Black"
+msgstr "Negro"
+
+#: .\race_event\models.py:36
+msgid "White"
+msgstr "Blanco"
+
+#: .\race_event\models.py:37
+msgid "Gray"
+msgstr "Gris"
+
+#: .\race_event\models.py:55
+msgid "Description of the car, be specific"
+msgstr "Descripción del auto, sea específico"
+
+#: .\raceday\settings.py:134
+msgid "English"
+msgstr "Inglés"
+
+#: .\raceday\settings.py:135
+msgid "Spanish"
+msgstr "Español (México)"

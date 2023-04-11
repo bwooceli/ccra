@@ -1,7 +1,6 @@
-# Assumptions
+# Hardware
 
-This has been tested with a USB->Serial adapter connected to a Fast Track (tm) Pinewood Derby Gate
-
+This has been tested on Windows 11 AMD with a USB->Serial adapter connected to a Fast Track Model K3 V1.0 Pinewood Derby Gate
 
 
 # Race Day script
