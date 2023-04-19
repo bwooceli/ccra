@@ -1,5 +1,8 @@
 from django.db import models
 
+# import slugify for slug generation
+from django.utils.text import slugify
+
 # django auth user model
 from django.contrib.auth.models import User
 
@@ -20,10 +23,21 @@ class GrandPrix(BaseCcraModel):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
 
+    slug = models.SlugField(max_length=255)
+
     organization = models.ForeignKey(RaceOrganization, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    # add unique together constraint for slug and organization
+    class Meta:
+        unique_together = ["slug", "organization"]
 
 
 class RaceSession(BaseCcraModel):
@@ -47,23 +61,23 @@ class RaceSession(BaseCcraModel):
         return self.heat_set.all().count()
 
     # return an ordered list of heat results by time_result
-    def heat_results(self):
-        return self.heatresult_set.all().order_by("time_result")
+    # def heat_results(self):
+    #     return self.heatresult_set.all().order_by("time_result")
 
-    def register_car_for_race(self, car):
-        # check if car is already registered
-        if self.careventregistration_set.filter(car=car).exists():
-            return False
+    # def register_car_for_race(self, car):
+    #     # check if car is already registered
+    #     if self.careventregistration_set.filter(car=car).exists():
+    #         return False
 
-        # get the next registration number
-        next_registration_number = self.careventregistration_set.all().count() + 1
+    #     # get the next registration number
+    #     next_registration_number = self.careventregistration_set.all().count() + 1
 
-        # register the car
-        car_event_registration = GrandPrixRegistration.objects.create(
-            car=car, event=self.event, registration_number=next_registration_number
-        )
+    #     # register the car
+    #     car_event_registration = GrandPrixRegistration.objects.create(
+    #         car=car, event=self.event, registration_number=next_registration_number
+    #     )
 
-        return car_event_registration
+    #     return car_event_registration
 
     # return an ordered list of cars by their average time_result
     # def car_results(self):
