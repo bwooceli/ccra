@@ -1,15 +1,18 @@
-# Hardware
+# Craft Car Racing Alliance
 
-This has been tested on Windows 11 AMD with a USB->Serial adapter connected to a Fast Track Model K3 V1.0 Pinewood Derby Gate
+This software is used to manage the Craft Car Racing Alliance. It is a Django application that uses a PostgreSQL database. 
 
+## Hardware
 
-# Race Day script
+This has been tested on Windows 11 AMD with a USB->Serial adapter connected to a Fast Track Model K3 V1.0 Timer Gate
+
+## Race Day script
 Run the race with 
 
-    .\derby_day.ps1
+    .\race_day.ps1
 
 
-# Tests
+## Tests
 Tests can be run with:
 
     coverage run --source='.' manage.py test

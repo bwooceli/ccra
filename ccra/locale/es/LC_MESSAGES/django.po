@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-10 22:31-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: .\grand_prix\models.py:25
+msgid "Blue"
+msgstr "Azul"
+
+#: .\grand_prix\models.py:26
+msgid "Brown"
+msgstr "Café"
+
+#: .\grand_prix\models.py:27
+msgid "Gold"
+msgstr "Oro"
+
+#: .\grand_prix\models.py:28
+msgid "Green"
+msgstr "Verde"
+
+#: .\grand_prix\models.py:29
+msgid "Orange"
+msgstr "Naranja"
+
+#: .\grand_prix\models.py:30
+msgid "Pink"
+msgstr "Rosa"
+
+#: .\grand_prix\models.py:31
+msgid "Purple"
+msgstr "Morado"
+
+#: .\grand_prix\models.py:32
+msgid "Red"
+msgstr "Rojo"
+
+#: .\grand_prix\models.py:33
+msgid "Silver"
+msgstr "Plata"
+
+#: .\grand_prix\models.py:34
+msgid "Yellow"
+msgstr "Amarillo"
+
+#: .\grand_prix\models.py:35
+msgid "Black"
+msgstr "Negro"
+
+#: .\grand_prix\models.py:36
+msgid "White"
+msgstr "Blanco"
+
+#: .\grand_prix\models.py:37
+msgid "Gray"
+msgstr "Gris"
+
+#: .\grand_prix\models.py:55
+msgid "Description of the car, be specific"
+msgstr "Descripción del auto, sea específico"
+
+#: .\ccra\settings.py:134
+msgid "English"
+msgstr "Inglés"
+
+#: .\ccra\settings.py:135
+msgid "Spanish"
+msgstr "Español (México)"
