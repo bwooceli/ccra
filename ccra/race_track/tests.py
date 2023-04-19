@@ -283,3 +283,4 @@ class TrackModelTestCases(TestCase):
             str(self.track),
         )
         self.assertEqual(self.manufacturer_name, str(self.manufacturer))
+   

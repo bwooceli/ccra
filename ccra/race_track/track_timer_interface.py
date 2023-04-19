@@ -257,7 +257,7 @@ class TrackTimer:
             if go_race != "":
                 auto_advance_car_lanes = False
                 if go_race == "q":
-                    return True
+                    race_running = "n"
                 continue
 
             print(f"\nHeat {heat} Ready! GO GO GO!", end="\r")
@@ -274,7 +274,8 @@ class TrackTimer:
                         f"\nRace Complete!\nPress Enter to quit or O to override: "
                     )
                     if finish_race == "":
-                        return True
+                        race_running = "n"
+                        continue
                 heat = int(
                     input(f"\nEnter to begin heat {heat+1} or override: ") or (heat + 1)
                 )

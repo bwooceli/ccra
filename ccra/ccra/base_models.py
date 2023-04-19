@@ -11,5 +11,13 @@ class BaseCcraModel(models.Model):
 
     auto_admin_reg = True
 
+    def save(self, *args, **kwargs):
+        # for each model property, if the name is "name" or "title", strip the value
+        for field in self._meta.get_fields():
+            if field.name == "name" or field.name == "title":
+                setattr(self, field.name, getattr(self, field.name).strip())
+
+        super().save(*args, **kwargs)
+
     class Meta:
         abstract = True

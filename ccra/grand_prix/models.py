@@ -47,6 +47,8 @@ class RaceSession(BaseCcraModel):
     """
 
     title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255)
+
     date = models.DateField(null=True, blank=True)
     time = models.TimeField(null=True, blank=True)
     event = models.ForeignKey("GrandPrix", on_delete=models.CASCADE)
@@ -56,9 +58,17 @@ class RaceSession(BaseCcraModel):
     def __str__(self):
         return self.title
 
-    @property
-    def heats(self):
-        return self.heat_set.all().count()
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    # @property
+    # def heats(self):
+    #     return self.heat_set.all().count()
+
+    class Meta:
+        unique_together = ["slug", "event"]
 
     # return an ordered list of heat results by time_result
     # def heat_results(self):
@@ -103,11 +113,20 @@ class SessionHeat(BaseCcraModel):
     A heat collects results of car results on a track
     """
 
-    session = models.ForeignKey("RaceSession", on_delete=models.CASCADE)
-    number = models.IntegerField()
+    session = models.ForeignKey(
+        "RaceSession", on_delete=models.CASCADE
+    )
+    heat_number = models.IntegerField()
     completed_timestamp = models.DateTimeField(blank=True, null=True)
     timer_correlation_uuid = models.UUIDField(blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        if not self.heat_number:
+            self.heat_number = self.session.sessionheat_set.all().count() + 1
+        super().save(*args, **kwargs)
+
+    class Meta:
+        unique_together = ["heat_number", "session"]
 
 class SessionHeatResult(BaseCcraModel):
     """
@@ -119,9 +138,6 @@ class SessionHeatResult(BaseCcraModel):
     lane_number = models.IntegerField()
     time_result = models.FloatField()
 
-    @property
-    def car_name(self):
-        return self.car.name
 
 
 class GrandPrixRegistration(BaseCcraModel):
@@ -142,6 +158,3 @@ class GrandPrixRegistration(BaseCcraModel):
         null=True,
         related_name="official_signoff_by",
     )
-
-    def __str__(self):
-        return f"{self.car.name} - {self.event.title} - {self.division.name}"

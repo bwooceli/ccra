@@ -1,7 +1,9 @@
 from django.db import models
 
+from ccra.base_models import BaseCcraModel
+from grand_prix.models import GrandPrix
 
-class TrackTimerManufacturer(models.Model):
+class TrackTimerManufacturer(BaseCcraModel):
     """TrackTimerManufacturer model
     Sample
         Name: Microwizard
@@ -19,7 +21,7 @@ class TrackTimerManufacturer(models.Model):
         return self.name
 
 
-class TrackTimer(models.Model):
+class TrackTimer(BaseCcraModel):
     """TrackTimer model
     Sample
         Model: K3
@@ -54,3 +56,16 @@ class TrackTimer(models.Model):
 
     def __str__(self):
         return f"{self.manufacturer} {self.model} {self.version}"
+
+
+
+class GrandPrixRawDataLog(BaseCcraModel):
+    """Raw data log for a grand prix event"""
+
+    event = models.ForeignKey(GrandPrix, on_delete=models.CASCADE)
+    correlation_id = models.UUIDField()
+    raw_data = models.TextField()
+
+    source_ip = models.CharField(max_length=100, blank=True, null=True)
+
+
