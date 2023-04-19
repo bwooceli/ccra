@@ -1,14 +1,19 @@
+from io import StringIO
 import random
 import time
 
 from django.test import TestCase
+from django.core.management import call_command
 
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 import serial
 
 import race_track.models as track_models
 from race_track.track_timer_interface import *
+from race_track import track_timer_interface
+from race_track.management.commands.run_race import Command
+
 
 DEFAULT_DELAY = 0.2
 
@@ -36,6 +41,10 @@ class MockedSerialInterface(serial.Serial):
         self.port_description = port_description
         self.connected = False
 
+
+class MockedTimer(TrackTimer):
+    def run_race(*args, **kwargs):
+        return True
 
 class MockedInvalidSerialInterface(MockedSerialInterface):
     def __init__(self, *args, **kwargs):
@@ -121,10 +130,6 @@ def mocked_timer_readline_two_dnf(*args, **kwargs):
     time.sleep(DEFAULT_DELAY)
     return b"@A=2.002! B=9.999  C=9.999  D=0.000  E=0.000  F=0.000  \r\n"
 
-
-def mocked_timer_readline_all_dnf(*args, **kwargs):
-    time.sleep(DEFAULT_DELAY)
-    return b"@A=9.999! B=9.999  C=9.999  D=0.000  E=0.000  F=0.000  \r\n"
 
 
 class timerTestCase(TestCase):
@@ -283,4 +288,16 @@ class TrackModelTestCases(TestCase):
             str(self.track),
         )
         self.assertEqual(self.manufacturer_name, str(self.manufacturer))
-   
+
+class RunRaceCommandTestCase(TestCase):
+    @patch.object(track_timer_interface, 'TrackTimer')
+    def test_run_race_command(self, mock_track_timer):
+        # create a mock instance of the TrackTimer class
+        mock_instance = MagicMock()
+        mock_track_timer.return_value = mock_instance
+        
+        # call the management command with arguments
+        call_command("run_race", "1", "10")
+        # assert that the run_race method was called with the correct arguments
+        mock_instance.run_race.assert_called_once_with(1, 10)
+        
