@@ -1,18 +1,55 @@
 from django.db import models
 
-# import slugify for slug generation
-from django.utils.text import slugify
-
-# django auth user model
 from django.contrib.auth.models import User
-
-# import django translation helpers
+from django.core.exceptions import ValidationError
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
-from ccra.base_models import BaseCcraModel
 
+from ccra.base_models import BaseCcraModel
 from race_organization.models import RaceOrganization
 from race_car.models import Car
+
+
+class GrandPrixInvitation(BaseCcraModel):
+    """
+    The Grand Prix Invitation lets organizations invite racers to register
+    for a Grand Prix event with a special invitation code.  The invitation code
+    is used to register the racer for for a published session.
+    """
+
+    grandprix = models.ForeignKey("GrandPrix", on_delete=models.CASCADE)
+    code = models.CharField(
+        max_length=255, unique=True, help_text="Invitation code for this Grand Prix"
+    )
+    lock_date = models.DateField(
+        null=True,
+        blank=True,
+        help_text="Date after which the invitation code will no longer be valid",
+    )
+
+    status = models.CharField(
+        max_length=255,
+        choices=(
+            ("active", _("Active")),
+            ("locked", _("Locked")),
+            ("inactive", _("Inactive")),
+        ),
+        default="active",
+    )
+
+    def save(self, *args, **kwargs):
+        # if the unique code is not at least 25 characters, throw a validation error and don't save
+        if len(self.code) < 13:
+            raise ValidationError(
+                _(
+                    "Invitation code must be at least 13 characters long, four words recommended"
+                )
+            )
+        super().save(*args, **kwargs)
+
+    class Meta:
+        unique_together = ["grandprix", "code"]
 
 
 class GrandPrix(BaseCcraModel):
@@ -113,9 +150,7 @@ class SessionHeat(BaseCcraModel):
     A heat collects results of car results on a track
     """
 
-    session = models.ForeignKey(
-        "RaceSession", on_delete=models.CASCADE
-    )
+    session = models.ForeignKey("RaceSession", on_delete=models.CASCADE)
     heat_number = models.IntegerField()
     completed_timestamp = models.DateTimeField(blank=True, null=True)
     timer_correlation_uuid = models.UUIDField(blank=True, null=True)
@@ -128,6 +163,7 @@ class SessionHeat(BaseCcraModel):
     class Meta:
         unique_together = ["heat_number", "session"]
 
+
 class SessionHeatResult(BaseCcraModel):
     """
     A heat result is a result of a car in a heat
@@ -137,7 +173,6 @@ class SessionHeatResult(BaseCcraModel):
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
     lane_number = models.IntegerField()
     time_result = models.FloatField()
-
 
 
 class GrandPrixRegistration(BaseCcraModel):

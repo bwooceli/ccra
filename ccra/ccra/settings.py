@@ -31,12 +31,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     # 3rd party apps
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    # tailwind app
+    "tailwind",
+    "theme",
     # local apps
     "grand_prix",
     "race_organization",
@@ -45,21 +46,21 @@ INSTALLED_APPS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = "/"
 
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
         ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
     }
 }
 
@@ -133,8 +134,8 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 LANGUAGES = [
-    ('en', _('English')),
-    ('es', _('Spanish')),
+    ("en", _("English")),
+    ("es", _("Spanish")),
 ]
 
 USE_TZ = True
@@ -149,3 +150,18 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+## Tailwind app installed via instructions from
+## https://django-tailwind.readthedocs.io/en/latest/installation.html
+## python -m pip install django-tailwind
+## python manage.py tailwind init
+##
+# Tailwind app settings
+TAILWIND_APP_NAME = 'theme'
+ 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"

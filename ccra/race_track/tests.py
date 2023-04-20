@@ -112,13 +112,8 @@ def mocked_serial_port_listing_with_single_likely_port(*args, **kwargs):
 
 
 def mocked_timer_readline_normal(*args, **kwargs):
-    possible_results = [
-        b'@A=1.758# B=1.392" C=1.086! D=0.000  E=0.000  F=0.000  \r\n',
-        b'A=2.572" B=2.929! @C=2.287#  D=0.000  E=0.000  F=0.000  \r\n',
-        b'A=2.572! @B=2.129# C=2.687"  D=0.000  E=0.000  F=0.000  \r\n',
-    ]
     time.sleep(DEFAULT_DELAY)
-    return random.choice(possible_results)
+    return b'@A=1.758# B=1.392" C=1.086! D=0.000  E=0.000  F=0.000  \r\n'
 
 
 def mocked_timer_readline_one_dnf(*args, **kwargs):

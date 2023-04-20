@@ -1,13 +1,11 @@
 from django.test import TestCase, TransactionTestCase
 
+from django.db.utils import IntegrityError
+from django.contrib.auth.models import User
+from django.utils.text import slugify
+
 import grand_prix.models as gp_models
 import race_organization.models as org_models
-
-from django.db.utils import IntegrityError
-
-from django.contrib.auth.models import User
-
-from django.utils.text import slugify
 
 
 class GrandPrixModelTests(TransactionTestCase):
@@ -86,3 +84,17 @@ class GrandPrixModelTests(TransactionTestCase):
         for i in range(number_of_heats):
             heat = gp_models.SessionHeat.objects.create(session=self.racesession)
             self.assertEqual(heat.heat_number, i + 1)
+
+    def test_grand_prix_invitation(self):
+        """Test GrandPrixInvitation model"""
+        invitation = gp_models.GrandPrixInvitation.objects.create(
+            grandprix=self.grandprix, code = "this is a test code"
+        )
+
+        self.assertEqual(invitation.code, "this is a test code")
+        self.assertEqual(invitation.grandprix, self.grandprix)
+        self.assertEqual(invitation.status, "active")
+
+    def test_grand_prix(self):
+        """Test GrandPrix model"""
+        pass
