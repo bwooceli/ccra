@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     "theme",
     # local apps
     "grand_prix",
-    "race_organization",
     "race_car",
+    "race_organization",
     "race_track",
 ]
 

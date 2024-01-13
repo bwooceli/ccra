@@ -24,6 +24,8 @@ class RaceOrganization(BaseCcraModel):
         help_text=_("Parent organization for this organization"),
     )
 
+    auto_admin_reg = True
+
     def __str__(self):
         return self.name
 
