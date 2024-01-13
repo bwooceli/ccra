@@ -5,13 +5,14 @@ import uuid
 import serial
 import serial.tools.list_ports
 
+from grand_prix.models import GrandPrix, RaceSession, SessionHeat, SessionHeatResult
+from race_car.models import Car
 
 class TrackTimer:
     def __init__(
         self,
         output_file=os.path.join(
             "race_output",
-            "race_track_output",
             f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S.%f')}.csv",
         ),
         lane_count=3,
@@ -231,8 +232,8 @@ class TrackTimer:
                 else:
                     final_heat = True
 
-            for idx in range(3):
-                if int(lane_cars[idx] or 0) < ending_car_number + 1 and not final_heat:
+            for idx in range(self.lane_count):
+                if int(lane_cars[idx] or 0) < (ending_car_number + 1) and not final_heat:
                     lane_cars[idx] = (
                         input(f"   Lane {idx + 1} Car #: ({lane_cars[idx]}) ")
                         or f"{lane_cars[idx]}"

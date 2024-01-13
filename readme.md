@@ -1,6 +1,6 @@
 # Craft Car Racing Alliance
 
-This software is used to manage the Craft Car Racing Alliance. It is a Django application that uses a PostgreSQL database. 
+This software is used to manage the Craft Car Racing Alliance. It is a Django application that can use a local SQLite database or connect to a database server.  SQLite is used by default.
 
 ## Hardware
 
@@ -11,6 +11,9 @@ Run the race with
 
     .\race_day.ps1
 
+ * ALL raw data from the track device will be saved to the `device_logs` directory.
+
+ * Formatted race results will be saved to the `race_output` directory.
 
 ## Tests
 Tests can be run with:

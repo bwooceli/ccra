@@ -179,6 +179,7 @@ class SessionHeatResult(BaseCcraModel):
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
     lane_number = models.IntegerField()
     time_result = models.FloatField()
+    correlation_id = models.TextField(blank=True, null=True)
 
 
 class GrandPrixRegistration(BaseCcraModel):

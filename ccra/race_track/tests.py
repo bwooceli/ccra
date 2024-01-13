@@ -292,7 +292,7 @@ class RunRaceCommandTestCase(TestCase):
         mock_track_timer.return_value = mock_instance
         
         # call the management command with arguments
-        call_command("run_race", "1", "10")
+        call_command("run_race", race_data_output_file="unittest.csv", starting_car_number=1, ending_car_number=10)
         # assert that the run_race method was called with the correct arguments
         mock_instance.run_race.assert_called_once_with(1, 10)
         
