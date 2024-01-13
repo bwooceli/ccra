@@ -5,9 +5,6 @@ import uuid
 import serial
 import serial.tools.list_ports
 
-# set date variable with yyyy-MM-dd format
-date = datetime.now().strftime("%Y-%m-%d")
-
 
 class TrackTimer:
     def __init__(

@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 from django.utils.translation import gettext_lazy as _
 
@@ -8,6 +9,7 @@ race_track_DEFAULTS = {
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 # Quick-start development settings - unsuitable for production
@@ -130,13 +132,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
-
 USE_I18N = True
 LANGUAGES = [
     ("en", _("English")),
     ("es", _("Spanish")),
 ]
+
+TIME_ZONE = "UTC"
 
 USE_TZ = True
 

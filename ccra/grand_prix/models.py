@@ -20,13 +20,19 @@ class GrandPrixInvitation(BaseCcraModel):
 
     grandprix = models.ForeignKey("GrandPrix", on_delete=models.CASCADE)
     code = models.CharField(
-        max_length=255, unique=True, help_text="Invitation code for this Grand Prix"
+        max_length=255, unique=True, help_text=_("Invitation code for this Grand Prix")
     )
     lock_date = models.DateField(
         null=True,
         blank=True,
-        help_text="Date after which the invitation code will no longer be valid",
+        help_text=_("Date after which the invitation code will no longer be valid"),
     )
+
+    password = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text=_("Optionally set a password in addition to the invitation code"), )
 
     status = models.CharField(
         max_length=255,

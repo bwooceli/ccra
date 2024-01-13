@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block extra_style %}
+<link rel="stylesheet" href="{% static 'grand_prix/css/style.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <!-- Login, Register and Invitation Code Panel -->
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-4">{% trans "Join the Race" %}</h2>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div>
+                <label for="{{ form.username.id_for_label }}" class="block">{% trans "Username:" %}</label>
+                {{ form.username }}
+            </div>
+            <div>
+                <label for="{{ form.password.id_for_label }}" class="block">{% trans "Password:" %}</label>
+                {{ form.password }}
+            </div>
+            <div class="flex space-x-4">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">{% trans "Login" %}</button>
+                <a href="% url 'register' %" class="bg-green-600 text-white px-4 py-2 rounded">{% trans "Register"
+                    %}</a>
+            </div>
+            <input type="hidden" name="next" value="{{ next }}">
+        </form>
+    </div>
+    <!-- Organize Different Racing Events Panel -->
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-4">{% trans "Organize Any Racing Event" %}</h2>
+        <p>
+            {% trans "The Craft Car Racing Alliance can help you organize racing events of any size or complexity.
+            Whether you're coordinating a district-wide racing series or an elementary Pack event, our platform
+            provides the tools and features you need to make your event a success. Experience seamless event management
+            and enjoy the thrill of the race with The Craft Car Racing Alliance." %}
+        </p>
+    </div>
+    <!-- Cool Features Panel -->
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-4">{% trans "Cool Features" %}</h2>
+        <ul class="list-disc list-inside space-y-2">
+            <li>{% trans "Create and manage Organizations for your District, Pack, Troop, etc." %}</li>
+            <li>{% trans "Create Grand Prix events and invite people to register their cars" %}</li>
+            <li>{% trans "Set up race sessions like 'Qualifying' or 'Outlaw Division'" %}</li>
+            <li>{% trans "Administer race heats for your Grand Prix events" %}</li>
+            <li>{% trans "Integrate with race track timers using a local app on-site" %}</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}
