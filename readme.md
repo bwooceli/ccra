@@ -1,19 +1,33 @@
-# Assumptions
+# Overview
 
-Assuming the Fast Track (tm) Pinewood Derby Gate and an IO Gear serial -> USB adapter, you will need to have [this driver](https://www.iogear.com/support/dm/driver/GUC232A)
+Currently, this software is primarily an interface for the Fast Track Model K3 V1.0 Timer Gate.  It will facilitate capturing data from the timer and storing it in a CSV.  
 
-Change the settings for these values based on your local system in raceday.settings
-  - DEFAULT_FAST_TRACK_PORT = "COM4"
-  - DEFAULT_FAST_TRACK_LANES = 3
+Work is underway to make it a Django application that can use a local SQLite database or connect to a database server.  SQLite will be used by default.
 
+## Hardware
 
-# Race Day script
+This has been tested on Windows 11 AMD with a USB->Serial adapter connected to a Fast Track Model K3 V1.0 Timer Gate
+
+## Python version
+This has been tested with Python 3.11 and 3.12
+
+## Bootstrapping
+run the bootstrap script with
+
+    .\bootstrap.ps1
+
+This will create a virtual environment and install the required packages and run a series of tests to ensure the environment is working properly. 
+
+## Race Day script
 Run the race with 
 
-    .\derby_day.ps1
+    .\race_day.ps1
 
+ * ALL raw data from the track device will be saved to the `device_logs` directory.
 
-# Tests
+ * Formatted race results will be saved to the `race_output` directory.
+
+## Tests
 Tests can be run with:
 
     coverage run --source='.' manage.py test

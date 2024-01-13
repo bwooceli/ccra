@@ -1,6 +1,7 @@
 # IGNORE FOR NOW
 *.csv
-fasttrack_output/
+race_output/
+device_logs/
 # Windows image file caches
 Thumbs.db
 ehthumbs.db

@@ -1,0 +1,185 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-20 21:47-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Spanish <LL@li.org>\n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\ccra\settings.py:137
+msgid "English"
+msgstr "Inglés"
+
+#: .\ccra\settings.py:138
+msgid "Spanish"
+msgstr "Español"
+
+#: .\grand_prix\models.py:23
+msgid "Invitation code for this Grand Prix"
+msgstr "Código de invitación para este Gran Premio"
+
+#: .\grand_prix\models.py:28
+msgid "Date after which the invitation code will no longer be valid"
+msgstr "Fecha después de la cual el código de invitación ya no será válido"
+
+#: .\grand_prix\models.py:35
+msgid "Optionally set a password in addition to the invitation code"
+msgstr "Opcionalmente, establezca una contraseña además del código de invitación"
+
+#: .\grand_prix\models.py:40
+msgid "Active"
+msgstr "Activo"
+
+#: .\grand_prix\models.py:41
+msgid "Locked"
+msgstr "Bloqueado"
+
+#: .\grand_prix\models.py:42
+msgid "Inactive"
+msgstr "Inactivo"
+
+#: .\grand_prix\models.py:52
+msgid "Invitation code must be at least 13 characters long, four words recommended"
+msgstr "El código de invitación debe tener al menos 13 caracteres, se recomiendan cuatro palabras"
+
+
+#: .\grand_prix\templates\grand_prix\landing_page.html:14
+#, python-format
+msgid "%(variable1)s! "
+msgstr "%(variable1)s! "
+
+#: .\grand_prix\templates\grand_prix\landing_page.html:18
+msgid "Email:"
+msgstr "Correo electrónico:"
+
+#: .\grand_prix\templates\grand_prix\landing_page.html:22
+msgid "Password:"
+msgstr "Contraseña:"
+
+#: .\grand_prix\templates\grand_prix\landing_page.html:26
+msgid "Invitation Code:"
+msgstr "Código de invitación:"
+
+#: .\grand_prix\templates\grand_prix\landing_page.html:30
+msgid "Login"
+msgstr "Iniciar sesión"
+
+#: .\grand_prix\templates\grand_prix\landing_page.html:31
+msgid "Register"
+msgstr "Registrarse"
+
+#: .\grand_prix\templates\grand_prix\landing_page.html:37
+msgid "Organize Any Racing Event"
+msgstr "Organice cualquier evento de carreras"
+
+#: .\grand_prix\templates\grand_prix\landing_page.html:39
+msgid "The Craft Car Racing Alliance can help you organize racing events of any size or complexity. Whether you\\'re coordinating a district-wide racing series or an elementary Pack event, our platform provides the tools and features you need to make your event a success. Experience seamless event management and enjoy the thrill of the race with The Craft Car Racing Alliance."
+msgstr "La Alianza de Carreras de Autos de Artesanía puede ayudarlo a organizar eventos de carreras de cualquier tamaño o complejidad. Ya sea que esté coordinando una serie de carreras en todo el distrito o un evento de paquete elemental, nuestra plataforma proporciona las herramientas y características que necesita para que su evento sea un éxito. Experimente una gestión de eventos sin problemas y disfrute de la emoción de la carrera con la Alianza de Carreras de Autos de Artesanía."
+
+#: .\grand_prix\templates\grand_prix\landing_page.html:47
+msgid "Create and manage Organizations for your District, Pack, Troop, etc."
+msgstr "Cree y administre organizaciones para su distrito, paquete, tropa, etc."
+
+#: .\grand_prix\templates\grand_prix\landing_page.html:48
+msgid "Create Grand Prix events and invite people to register their cars"
+msgstr "Cree eventos de Gran Premio e invite a las personas a registrar sus autos"
+
+#: .\grand_prix\templates\grand_prix\landing_page.html:49
+msgid "Set up race sessions like \\"
+msgstr "Configure sesiones de carrera como \\"
+
+#: .\grand_prix\templates\grand_prix\landing_page.html:50
+msgid "Administer race heats for your Grand Prix events"
+msgstr "Administre los calentamientos de carreras para sus eventos de Gran Premio"
+
+#: .\grand_prix\templates\grand_prix\landing_page.html:51
+msgid "Integrate with race track timers using a local app on-site"
+msgstr "Intégrese con temporizadores de pistas de carreras utilizando una aplicación local en el sitio"
+
+#: .\grand_prix\views.py:11
+msgid "Hello"
+msgstr "Hola"
+
+#: .\grand_prix\views.py:12
+msgid "World!"
+msgstr "¡Mundo!"
+
+#: .\race_car\models.py:12
+msgid "Blue"
+msgstr "Azul"
+
+#: .\race_car\models.py:13
+msgid "Brown"
+msgstr "Marrón"
+
+#: .\race_car\models.py:14
+msgid "Gold"
+msgstr "Oro"
+
+#: .\race_car\models.py:15
+msgid "Green"
+msgstr "Verde"
+
+#: .\race_car\models.py:16
+msgid "Orange"
+msgstr "Naranja"
+
+#: .\race_car\models.py:17
+msgid "Pink"
+msgstr "Rosado"
+
+#: .\race_car\models.py:18
+msgid "Purple"
+msgstr "Morado"
+
+#: .\race_car\models.py:19
+msgid "Red"
+msgstr "Rojo"
+
+#: .\race_car\models.py:20
+msgid "Silver"
+msgstr "Plateado"
+
+#: .\race_car\models.py:21
+msgid "Yellow"
+msgstr "Amarillo"
+
+#: .\race_car\models.py:22
+msgid "Black"
+msgstr "Negro"
+
+#: .\race_car\models.py:23
+msgid "White"
+msgstr "Blanco"
+
+#: .\race_car\models.py:24
+msgid "Gray"
+msgstr "Gris"
+
+#: .\race_car\models.py:41
+msgid "Helper for this car maker"
+msgstr "Ayuda para este fabricante de automóviles"
+
+#: .\race_car\models.py:63
+msgid "Either a user or first and last name must be provided"
+msgstr "Debe proporcionar un usuario o un nombre y apellido"
+
+#: .\race_car\models.py:87
+msgid "Description of the car, be specific"
+msgstr "Descripción del auto, sea específico"
+
+#: .\race_organization\models.py:24
+msgid "Parent organization for this organization"
+msgstr "Organización principal para esta organización"
