@@ -46,6 +46,7 @@ class MockedTimer(TrackTimer):
     def run_race(*args, **kwargs):
         return True
 
+
 class MockedInvalidSerialInterface(MockedSerialInterface):
     def __init__(self, *args, **kwargs):
         # throw the serial.serialutil.SerialException
@@ -126,7 +127,6 @@ def mocked_timer_readline_two_dnf(*args, **kwargs):
     return b"@A=2.002! B=9.999  C=9.999  D=0.000  E=0.000  F=0.000  \r\n"
 
 
-
 class timerTestCase(TestCase):
     def setUp(self):
         pass
@@ -182,7 +182,9 @@ class timerTestCase(TestCase):
     @patch("builtins.input", mocked_user_input_enter)
     def test_heats(self):
         output_file = self.reset_output_file(self._testMethodName)
-        track = TrackTimer(output_file=output_file, log_file="tracktimer_device_test.log")
+        track = TrackTimer(
+            output_file=output_file, log_file="tracktimer_device_test.log"
+        )
 
         ending_car_number = 10
 
@@ -284,15 +286,20 @@ class TrackModelTestCases(TestCase):
         )
         self.assertEqual(self.manufacturer_name, str(self.manufacturer))
 
+
 class RunRaceCommandTestCase(TestCase):
-    @patch.object(track_timer_interface, 'TrackTimer')
+    @patch.object(track_timer_interface, "TrackTimer")
     def test_run_race_command(self, mock_track_timer):
         # create a mock instance of the TrackTimer class
         mock_instance = MagicMock()
         mock_track_timer.return_value = mock_instance
-        
+
         # call the management command with arguments
-        call_command("run_race", race_data_output_file="unittest.csv", starting_car_number=1, ending_car_number=10)
+        call_command(
+            "run_race",
+            race_data_output_file="unittest.csv",
+            starting_car_number=1,
+            ending_car_number=10,
+        )
         # assert that the run_race method was called with the correct arguments
         mock_instance.run_race.assert_called_once_with(1, 10)
-        
