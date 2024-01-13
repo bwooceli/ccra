@@ -22,11 +22,13 @@ class TestRaceEventOrganization(TestCase):
             name="Test Child Organization",
             parent_organization=self.test_parent_organization,
         )
-        
+
     def test_organization_name_returns_correctly(self):
         self.assertEqual(self.test_organization.name, str(self.test_organization))
-    
+
     def test_organization_name_does_not_save_with_extra_spaces(self):
         self.test_organization.name = " Test Organization with Extra Spaces "
         self.test_organization.save()
-        self.assertEqual(self.test_organization.name, "Test Organization with Extra Spaces")
+        self.assertEqual(
+            self.test_organization.name, "Test Organization with Extra Spaces"
+        )

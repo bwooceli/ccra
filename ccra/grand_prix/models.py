@@ -32,7 +32,8 @@ class GrandPrixInvitation(BaseCcraModel):
         max_length=255,
         blank=True,
         null=True,
-        help_text=_("Optionally set a password in addition to the invitation code"), )
+        help_text=_("Optionally set a password in addition to the invitation code"),
+    )
 
     status = models.CharField(
         max_length=255,

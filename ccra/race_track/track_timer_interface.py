@@ -8,6 +8,7 @@ import serial.tools.list_ports
 from grand_prix.models import GrandPrix, RaceSession, SessionHeat, SessionHeatResult
 from race_car.models import Car
 
+
 class TrackTimer:
     def __init__(
         self,
@@ -54,7 +55,7 @@ class TrackTimer:
         self.output_file = output_file
 
         # a path to the log file for the raw, umparsed data from the timer
-        self.log_file = os.path.join("device_logs",log_file)
+        self.log_file = os.path.join("device_logs", log_file)
 
         self.connect_to_timer()
 
@@ -116,7 +117,7 @@ class TrackTimer:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
         correlation_id = uuid.uuid4()
 
-        #create the device log directory if it doesn't exist
+        # create the device log directory if it doesn't exist
         os.makedirs(os.path.dirname(self.log_file), exist_ok=True)
 
         # Write the raw data to a tracktimer_device.log file, create the file if it doesn't exist
@@ -233,7 +234,10 @@ class TrackTimer:
                     final_heat = True
 
             for idx in range(self.lane_count):
-                if int(lane_cars[idx] or 0) < (ending_car_number + 1) and not final_heat:
+                if (
+                    int(lane_cars[idx] or 0) < (ending_car_number + 1)
+                    and not final_heat
+                ):
                     lane_cars[idx] = (
                         input(f"   Lane {idx + 1} Car #: ({lane_cars[idx]}) ")
                         or f"{lane_cars[idx]}"

@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class FastTrackConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'race_track'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "race_track"

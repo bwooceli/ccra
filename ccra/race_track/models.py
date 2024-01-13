@@ -3,6 +3,7 @@ from django.db import models
 from ccra.base_models import BaseCcraModel
 from grand_prix.models import GrandPrix
 
+
 class TrackTimerManufacturer(BaseCcraModel):
     """TrackTimerManufacturer model
     Sample
@@ -58,7 +59,6 @@ class TrackTimer(BaseCcraModel):
         return f"{self.manufacturer} {self.model} {self.version}"
 
 
-
 class GrandPrixRawDataLog(BaseCcraModel):
     """Raw data log for a grand prix event"""
 
@@ -67,5 +67,3 @@ class GrandPrixRawDataLog(BaseCcraModel):
     raw_data = models.TextField()
 
     source_ip = models.CharField(max_length=100, blank=True, null=True)
-
-

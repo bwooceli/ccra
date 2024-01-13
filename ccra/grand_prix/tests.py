@@ -88,7 +88,7 @@ class GrandPrixModelTests(TransactionTestCase):
     def test_grand_prix_invitation(self):
         """Test GrandPrixInvitation model"""
         invitation = gp_models.GrandPrixInvitation.objects.create(
-            grandprix=self.grandprix, code = "this is a test code"
+            grandprix=self.grandprix, code="this is a test code"
         )
 
         self.assertEqual(invitation.code, "this is a test code")
